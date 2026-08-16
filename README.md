@@ -44,13 +44,13 @@ The report features a high-density, executive-tailored interface structured into
 ![Product Performance](screenshots/02_product_performance.png)
 
 <details>
-<summary>🔍 Click to view Cross-Filtering & Row-Level Security (RLS) Verification</summary>
+<summary>🔍 Click to view Dynamic Temporal Filtering & Row-Level Security (RLS) Isolation</summary>
 
-### Territorial RLS Isolation (Central Region: $62.4K Filter Context)
-![RLS Central Isolation](screenshots/03_rls_central_view.png)
+### Dynamic Smart Narrative Recalculation (Filtered by 2014)
+![Filtered Financial Overview](screenshots/03_financial_overview_filtered_2014.png)
 
-### Territorial RLS Isolation (South Region: $24.0K Filter Context)
-![RLS South Isolation](screenshots/04_rls_south_view.png)
+### Territorial RLS Isolation (Central Region: Product Performance View)
+![RLS Central Product Performance](screenshots/04_product_performance_RLS_central_products.png)
 
 </details>
 
@@ -66,3 +66,4 @@ To resolve the industry-standard **Fact Grain Mismatch** (daily transactional sa
                          | 1:N                 |    \ 1:N            | 1:N
                          v                     | 1:N \               v
                   [ Fact_Sales ] <-------------+      +-------> [ Fact_Targets ]
+```
