@@ -1,0 +1,29 @@
+relationship AutoDetected_31c82be1-2cc5-473b-9d35-a51ecef65cd4
+	fromColumn: Fact_Sales.'Area Code'
+	toColumn: Dim_Geography.'Area Code'
+
+relationship AutoDetected_5bea74e2-b510-4d21-a98c-2a62134052c4
+	fromColumn: Fact_Sales.Product
+	toColumn: Dim_Product.Product
+
+relationship 35290545-2574-44c7-93c3-32e31ae67391
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Dim_Calendar.Date
+	toColumn: LocalDateTable_8c451515-ec40-466c-9af8-e7b2b7d2fa5c.Date
+
+relationship cd878df6-79b4-2d14-c3d2-86ced72d37ce
+	fromColumn: Fact_Sales.Date
+	toColumn: Dim_Calendar.Date
+
+relationship AutoDetected_5d12bb26-32e3-4ee8-a66b-1a03c5868818
+	fromColumn: Fact_Targets.'Area Code'
+	toColumn: Dim_Geography.'Area Code'
+
+relationship AutoDetected_721883d4-7ea4-498a-a6ab-4bea19c47cc4
+	fromColumn: Fact_Targets.Product
+	toColumn: Dim_Product.Product
+
+relationship 21ffc0b1-a941-9a97-a9b3-1a69e888694d
+	fromColumn: Fact_Targets.Date
+	toColumn: Dim_Calendar.Date
+

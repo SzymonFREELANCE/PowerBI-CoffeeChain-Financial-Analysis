@@ -1,0 +1,140 @@
+table Fact_Sales
+	lineageTag: 071b4391-344f-43cd-9873-c1a8d8ff6378
+
+	column 'Area Code'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 46c3c85b-9c12-46df-9bb1-2007fde23612
+		summarizeBy: none
+		sourceColumn: Area Code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cogs
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c494924d-84f7-444d-aa2b-bd77c30ec7b2
+		summarizeBy: sum
+		sourceColumn: Cogs
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: fca6107c-ab59-452d-8c6b-cafa9d2a3adb
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Inventory Margin'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 08375555-6f6f-4a78-81af-040cea81645f
+		summarizeBy: sum
+		sourceColumn: Inventory Margin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Margin
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6e34499f-095d-4332-80bf-995c875d4304
+		summarizeBy: sum
+		sourceColumn: Margin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Marketing
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d3712b10-c155-4e55-9e71-61a4b38a847b
+		summarizeBy: sum
+		sourceColumn: Marketing
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		isHidden
+		lineageTag: 38aae54d-f318-4df9-ba55-c00ca91ed252
+		summarizeBy: none
+		sourceColumn: Product
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Profit
+		dataType: int64
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3545289d-51bb-4575-a009-f70aae414255
+		summarizeBy: sum
+		sourceColumn: Profit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sales
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c7931640-f5aa-462c-a29c-d9a0b240741a
+		summarizeBy: sum
+		sourceColumn: Sales
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total_expenses
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d0f8d329-c8d0-496b-90f4-d458ebf7d12d
+		summarizeBy: sum
+		sourceColumn: Total_expenses
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Sales = m
+		mode: import
+		source =
+				let
+				  Źródło = Csv.Document(File.Contents(DatasetFilePath),[Delimiter=",", Columns=21, QuoteStyle=QuoteStyle.None]),
+				  #"Nagłówki o podwyższonym poziomie" = Table.PromoteHeaders(Źródło, [PromoteAllScalars = true]),
+				    #"Zmieniono typ z ustawieniami regionalnymi" = Table.TransformColumnTypes(#"Nagłówki o podwyższonym poziomie", {{"Date", type date}}, "en-US"),
+				    #"Zmieniono typ" = Table.TransformColumnTypes(#"Zmieniono typ z ustawieniami regionalnymi",{{"Cogs", Int64.Type}, {"DifferenceBetweenActualandTargetProfit", Int64.Type}, {"Inventory Margin", Int64.Type}, {"Margin", Int64.Type}, {"Marketing", Int64.Type}, {"Profit", Int64.Type}, {"Sales", Int64.Type}, {"Target_cogs", Int64.Type}, {"Target_margin", Int64.Type}, {"Target_profit", Int64.Type}, {"Target_sales ", Int64.Type}, {"Total_expenses", Int64.Type}, {"Area Code", Int64.Type}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Zmieniono typ",{"Target_cogs", "Target_margin", "Target_profit", "Target_sales ", "DifferenceBetweenActualandTargetProfit", "Market_size", "Market", "Product_line", "Product_type", "State", "Type"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Nawigacja
+
+	annotation PBI_ResultType = Table
+

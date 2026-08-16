@@ -1,0 +1,7 @@
+role Regional_Central
+	modelPermission: read
+
+	tablePermission Dim_Geography = [Market] == "Central"
+
+	annotation PBI_Id = 3bd75094b6bb48bea1f2988faa93d7d3
+

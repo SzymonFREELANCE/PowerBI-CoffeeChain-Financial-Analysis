@@ -1,0 +1,7 @@
+expression DatasetFilePath = "C:\Users\semen\Desktop\PRACA\PROJECT FOR CV\2 projekt\Coffee_Chain_Sales .csv" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 3877bf9d-4f71-4990-b471-561966612b9e
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

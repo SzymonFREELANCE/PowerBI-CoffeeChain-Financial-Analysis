@@ -1,0 +1,30 @@
+model Model
+	culture: pl-PL
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Fact_Sales","_Measures","Dim_Product","Dim_Geography","Fact_Targets","DatasetFilePath"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Fact_Sales
+ref table _Measures
+ref table Dim_Calendar
+ref table Dim_Product
+ref table Dim_Geography
+ref table DateTableTemplate_13f47835-d007-4645-93ca-96c60976393d
+ref table LocalDateTable_8c451515-ec40-466c-9af8-e7b2b7d2fa5c
+ref table Fact_Targets
+
+ref role Regional_West
+ref role Regional_East
+ref role Regional_Central
+ref role Regional_South
+
+ref cultureInfo pl-PL
+

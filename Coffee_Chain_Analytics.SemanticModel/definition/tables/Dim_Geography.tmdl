@@ -1,0 +1,54 @@
+table Dim_Geography
+	lineageTag: 963c7529-0725-4574-b9a8-d8422b6300c4
+
+	column 'Area Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: c8c22883-995e-43a9-a7d1-4b9b607daf63
+		summarizeBy: none
+		sourceColumn: Area Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Market Size'
+		dataType: string
+		lineageTag: 81c1ea2b-92b8-4ad0-a12d-d86610e77122
+		summarizeBy: none
+		sourceColumn: Market Size
+
+		annotation SummarizationSetBy = Automatic
+
+	column Market
+		dataType: string
+		lineageTag: aa194272-3afe-4e5e-8b75-2b5c65b5a18b
+		summarizeBy: none
+		sourceColumn: Market
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 9c1d6a38-ec31-436e-8f9a-7b564d1a8c98
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Geography = m
+		mode: import
+		source =
+				let
+				  Źródło = Csv.Document(File.Contents(DatasetFilePath),[Delimiter=",", Columns=21, QuoteStyle=QuoteStyle.None]),
+				  #"Promoted Headers" = Table.PromoteHeaders(Źródło, [PromoteAllScalars = true]),
+				    #"Zmieniono typ z ustawieniami regionalnymi" = Table.TransformColumnTypes(#"Promoted Headers", {{"Date", type date}}, "en-US"),
+				    #"Zmieniono typ" = Table.TransformColumnTypes(#"Zmieniono typ z ustawieniami regionalnymi",{{"Cogs", Int64.Type}, {"DifferenceBetweenActualandTargetProfit", Int64.Type}, {"Inventory Margin", Int64.Type}, {"Margin", Int64.Type}, {"Marketing", Int64.Type}, {"Profit", Int64.Type}, {"Sales", Int64.Type}, {"Target_cogs", Int64.Type}, {"Target_margin", Int64.Type}, {"Target_profit", Int64.Type}, {"Target_sales ", Int64.Type}, {"Total_expenses", Int64.Type}, {"Area Code", Int64.Type}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Zmieniono typ",{"Area Code", "Market_size", "Market", "State"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"Area Code"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"Market_size", "Market Size"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Nawigacja
+
+	annotation PBI_ResultType = Table
+

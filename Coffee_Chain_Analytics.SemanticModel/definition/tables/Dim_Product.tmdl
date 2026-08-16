@@ -1,0 +1,53 @@
+table Dim_Product
+	lineageTag: 1c1f3c5a-f07d-41fa-a2d2-e858b0b89406
+
+	column 'Product Line'
+		dataType: string
+		lineageTag: 9212c98f-deac-4796-973c-5c93377da8ab
+		summarizeBy: none
+		sourceColumn: Product Line
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Type'
+		dataType: string
+		lineageTag: 7d6d87b6-a953-4331-90f4-629d4ecfc290
+		summarizeBy: none
+		sourceColumn: Product Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 6705e2dc-2b74-4155-8462-e0ee5fce10f3
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type
+		dataType: string
+		lineageTag: 1c26c28d-bf4e-4f7e-9811-79170a9a6d99
+		summarizeBy: none
+		sourceColumn: Type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Product = m
+		mode: import
+		source =
+				let
+				  Źródło = Csv.Document(File.Contents(DatasetFilePath),[Delimiter=",", Columns=21, QuoteStyle=QuoteStyle.None]),
+				  #"Nagłówki o podwyższonym poziomie" = Table.PromoteHeaders(Źródło, [PromoteAllScalars = true]),
+				    #"Zmieniono typ z ustawieniami regionalnymi" = Table.TransformColumnTypes(#"Nagłówki o podwyższonym poziomie", {{"Date", type date}}, "en-US"),
+				    #"Zmieniono typ" = Table.TransformColumnTypes(#"Zmieniono typ z ustawieniami regionalnymi",{{"Cogs", Int64.Type}, {"DifferenceBetweenActualandTargetProfit", Int64.Type}, {"Inventory Margin", Int64.Type}, {"Margin", Int64.Type}, {"Marketing", Int64.Type}, {"Profit", Int64.Type}, {"Sales", Int64.Type}, {"Target_cogs", Int64.Type}, {"Target_margin", Int64.Type}, {"Target_profit", Int64.Type}, {"Target_sales ", Int64.Type}, {"Total_expenses", Int64.Type}, {"Area Code", Int64.Type}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Zmieniono typ",{"Product_line", "Product_type", "Product", "Type"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"Product"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"Product_line", "Product Line"}, {"Product_type", "Product Type"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Nawigacja
+
+	annotation PBI_ResultType = Table
+

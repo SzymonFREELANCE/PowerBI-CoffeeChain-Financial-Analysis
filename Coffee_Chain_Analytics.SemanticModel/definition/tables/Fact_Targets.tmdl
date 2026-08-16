@@ -1,0 +1,109 @@
+table Fact_Targets
+	isHidden
+	lineageTag: 935e31f7-0d57-46fe-9760-7c4668974db9
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: bf7c695d-a972-409e-bd40-a998392307d8
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Area Code'
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 102dd3ab-6025-4294-9828-e44331e20e21
+		summarizeBy: none
+		sourceColumn: Area Code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		isHidden
+		lineageTag: ea54e46b-8826-476d-8b75-b2011fd1985d
+		summarizeBy: none
+		sourceColumn: Product
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target_sales
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4ec75a80-5e52-4b99-a7ac-24aa933b256e
+		summarizeBy: sum
+		sourceColumn: Target_sales
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target_cogs
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c45a8920-b605-4855-85aa-aa436eef92ab
+		summarizeBy: sum
+		sourceColumn: Target_cogs
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target_margin
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f6d6dcf6-0576-439f-a463-4e31060be991
+		summarizeBy: sum
+		sourceColumn: Target_margin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Target_profit
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b7f16abf-55f1-49a6-bde6-0ebf55ec4403
+		summarizeBy: sum
+		sourceColumn: Target_profit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Fact_Targets = m
+		mode: import
+		source =
+				let
+				  Źródło = Csv.Document(File.Contents(DatasetFilePath),[Delimiter=",", Columns=21, QuoteStyle=QuoteStyle.None]),
+				  #"Nagłówki o podwyższonym poziomie" = Table.PromoteHeaders(Źródło, [PromoteAllScalars = true]),
+				    #"Zmieniono typ z ustawieniami regionalnymi" = Table.TransformColumnTypes(#"Nagłówki o podwyższonym poziomie", {{"Date", type date}}, "en-US"),
+				    #"Zmieniono typ" = Table.TransformColumnTypes(#"Zmieniono typ z ustawieniami regionalnymi",{{"Cogs", Int64.Type}, {"DifferenceBetweenActualandTargetProfit", Int64.Type}, {"Inventory Margin", Int64.Type}, {"Margin", Int64.Type}, {"Marketing", Int64.Type}, {"Profit", Int64.Type}, {"Sales", Int64.Type}, {"Target_cogs", Int64.Type}, {"Target_margin", Int64.Type}, {"Target_profit", Int64.Type}, {"Target_sales ", Int64.Type}, {"Total_expenses", Int64.Type}, {"Area Code", Int64.Type}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Zmieniono typ",{"Date", "Area Code", "Product", "Target_sales ", "Target_cogs", "Target_margin", "Target_profit"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"Date", "Product", "Area Code"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Removed Duplicates",{{"Target_sales ", "Target_sales"}})
+				in
+				    #"Renamed Columns"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Nawigacja
+
+	annotation PBI_ResultType = Table
+
